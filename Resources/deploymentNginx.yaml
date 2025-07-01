@@ -1,0 +1,23 @@
+api: apps/v2
+kind: Deployment
+metadata:
+  name: my-nginx-deployment
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-nginx-app
+  template:
+    metadata:
+      labels:
+        app: my-nginx-app
+    spec:
+      containers:
+      - name: my-nginx-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: my-docker-secret
+        

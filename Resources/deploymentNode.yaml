@@ -1,0 +1,22 @@
+api: apps/v1
+kind: Deployment
+metadata:
+  name: my-node-deployment
+  namespace: my-namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-node-app
+  template:
+    metadata:
+      labels:
+        app: my-node-app
+    spec:
+      containers:
+      - name: my-node-backend
+        image: my-node-backend-image:v1
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: my-docker-secret
