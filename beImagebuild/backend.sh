@@ -8,7 +8,7 @@ IMAGE_NAME="my-node-backend-image"
 # Tag for your Docker image (e.g., latest, v1.0, dev)
 IMAGE_TAG="v1" 
 
-# Full image name with tag for Docker Hub
+# Full image name with tag for Docker Hubbb
 FULL_IMAGE_NAME="$DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG"
 
 # --- Validate Docker Hub Personal Access Token (PAT) ---
