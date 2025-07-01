@@ -1,0 +1,16 @@
+name: CI/CD for backend pod
+
+on:
+  push:
+    branches:
+      - backend # This workflow will run whenever there's a push to the 'backend' branch
+
+jobs:
+  deploy: 
+    runs-on: self-hosted
+
+    steps:
+      - name: getting into directory
+        run: |
+          pwd
+          ./backend.sh
