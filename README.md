@@ -30,6 +30,13 @@ kubectl apply -f docker-regcred.yaml
 
 ## install a self-hosted runner
 
+## add docker token into gitHib secret
+
+### then only you will be able to use it in your scripts which are triggering gthrough git
+```
+https://github.com/abhayrdhyani/K8s-Website-Hosting/settings/secrets/actions
+```
+
 ## Generate git access token to push from a server
 
 https://github.com/settings/tokens
