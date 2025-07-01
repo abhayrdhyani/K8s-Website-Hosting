@@ -28,4 +28,8 @@ kubectl apply -f docker-regcred.yaml
 
 **[Docker Secret is successfully created now edit your Deplolyment and include it in imagepullsecrets]**
 
+## install a self-hosted runner
 
+## Generate git access token to push from a server
+
+https://github.com/settings/tokens
