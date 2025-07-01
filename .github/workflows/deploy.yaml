@@ -1,16 +1,32 @@
-name: CI/CD for backend pod
-
+name: CI/CD for backend pod # Corrected name
 on:
   push:
     branches:
-      - main # This workflow will run whenever there's a push to the 'backend' branc
+      - main # This workflow will run whenever there's a push to the 'main' branch
 
 jobs:
-  deploy: 
-    runs-on: self-hosted
+  deploy:
+    runs-on: self-hosted # Your self-hosted runner
 
     steps:
-      - name: getting into directory
+      # Step 1: Checkout the repository code
+      # This action fetches your repository's contents onto the runner.
+      # WITHOUT THIS, 'backend.sh' WILL NOT BE FOUND!
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set DOCKER_PAT environment variable and execute your backend build/push script
+      # Assuming 'backend.sh' is located in the root of your repository
+      - name: Build and Push Backend Image
         run: |
-          pwd
+          pwd # This will show you the current working directory (should be the repo root)
           ./backend.sh
+        env:
+          # This environment variable will be picked up by your backend.sh script for docker login
+          # IMPORTANT: You must configure DOCKER_HUB_PERSONAL_ACCESS_TOKEN
+          # as a secret in your GitHub repository settings.
+          # Go to your repository -> Settings -> Secrets and variables -> Actions -> New repository secret
+          DOCKER_PAT: ${{ secrets.DOCKER_HUB_PERSONAL_ACCESS_TOKEN }}
+
+      # You might add more steps here, e.g., kubectl apply to update your deployment
+      # if your Kubernetes setup is also part of this workflow.
