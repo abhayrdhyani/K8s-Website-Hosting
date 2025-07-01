@@ -40,7 +40,8 @@ echo "Docker login successful."
 # --- Build the Docker Image ---
 echo "Building Docker image: $FULL_IMAGE_NAME"
 # The '.' indicates that the Dockerfile is in the current directory (which is now 'backend/')
-docker build -t "$FULL_IMAGE_NAME" .
+#docker build -t "$FULL_IMAGE_NAME" .
+DOCKER_BUILDKIT=0 docker build -t "$FULL_IMAGE_NAME" .
 
 if [ $? -ne 0 ]; then
   echo "Error: Docker image build failed. Check your Dockerfile and context."
@@ -53,6 +54,7 @@ echo "Docker image built successfully."
 # --- Push the Docker Image to Docker Hub ---
 echo "Pushing Docker image: $FULL_IMAGE_NAME to Docker Hub..."
 docker push "$FULL_IMAGE_NAME"
+
 
 if [ $? -ne 0 ]; then
   echo "Error: Docker image push failed. Check your network or Docker Hub permissions."
