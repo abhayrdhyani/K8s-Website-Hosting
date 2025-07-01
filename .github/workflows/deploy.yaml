@@ -2,7 +2,7 @@ name: CI/CD for backend pod # Corrected name
 on:
   push:
     branches:
-      - main # This workflow will run whenever there's a push to the 'main' branch
+      - main # This workflow will run whenever there's a push to the 'main' branchh
 
 jobs:
   deploy:
