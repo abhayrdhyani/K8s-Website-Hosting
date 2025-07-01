@@ -3,7 +3,7 @@ name: CI/CD for backend pod
 on:
   push:
     branches:
-      - backend # This workflow will run whenever there's a push to the 'backend' branc
+      - main # This workflow will run whenever there's a push to the 'backend' branc
 
 jobs:
   deploy: 
