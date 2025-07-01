@@ -1,0 +1,251 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&family=Plus+Jakarta+Sans%3Awght%40400%3B500%3B700%3B800"
+    />
+
+    <title>The Mountain Cafe</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div
+      id="audio-player"
+      class="fixed bottom-4 left-4 bg-white shadow-xl rounded-lg flex items-center p-4 gap-4 z-50 transition-opacity duration-500"
+      >
+      <button
+        id="play-btn"
+        class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+      >
+        Play
+      </button>
+      <input
+        id="volume-slider"
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        value="1"
+        class="w-32"
+      />
+    </div>
+
+    <div
+      class="fixed top-4 left-4 bg-white shadow-xl rounded-lg flex items-center p-4 gap-4 z-50"
+    >
+      <button
+        id="fetch-backend-data"
+        class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+      >
+        Fetch Data from Backend
+      </button>
+      <p id="backend-message" class="text-gray-800">Waiting for backend data...</p>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // --- Audio Player Script ---
+        const audio = new Audio('tropical_1.mp3');
+        audio.loop = true;
+        audio.volume = 0.3; // Set initial volume to 30%
+
+        const playBtn = document.getElementById('play-btn');
+        const volumeSlider = document.getElementById('volume-slider');
+        // const playerUI = document.getElementById('audio-player'); // playerUI is now always visible
+
+        let isPlaying = false; // Music is not playing initially
+
+        playBtn.addEventListener('click', () => {
+          if (isPlaying) {
+            audio.pause();
+            playBtn.textContent = 'Play';
+          } else {
+            // Only attempt to play if the audio has loaded
+            audio.play().catch(e => console.error("Error playing audio:", e));
+            playBtn.textContent = 'Pause';
+            // No need to remove opacity/pointer-events, as the player is now visible by default.
+          }
+          isPlaying = !isPlaying;
+        });
+
+        volumeSlider.addEventListener('input', () => {
+          audio.volume = volumeSlider.value;
+        });
+
+        // --- Fetch Data from Backend Script ---
+        const fetchBackendButton = document.getElementById('fetch-backend-data');
+        const backendMessageParagraph = document.getElementById('backend-message');
+
+        fetchBackendButton.addEventListener('click', () => {
+          // IMPORTANT: Ensure this IP and port are correct for your EC2 backend deployment.
+          fetch('http://15.206.149.210:8080/api/hello')
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log('Data from backend:', data);
+              backendMessageParagraph.textContent = data.message;
+            })
+            .catch((error) => {
+              console.error('Error fetching data from backend:', error);
+              backendMessageParagraph.textContent = 'Error: ' + error.message;
+            });
+        });
+      });
+    </script>
+
+    <div
+      class="relative flex size-full min-h-screen flex-col bg-[#111b22] dark group/design-root overflow-x-hidden"
+      style='font-family: "Plus Jakarta Sans", "Noto Sans", sans-serif;'
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <header
+          class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#243947] px-10 py-3"
+        >
+          <div class="flex items-center gap-4 text-white">
+            <div class="size-4">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"></path>
+              </svg>
+            </div>
+            <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">
+              The Mountain Cafe
+            </h2>
+          </div>
+          <div class="flex flex-1 justify-end gap-8">
+            <div class="flex items-center gap-9">
+              <a class="text-white text-sm font-medium leading-normal" href="#">Menu</a>
+              <a class="text-white text-sm font-medium leading-normal" href="#">About</a>
+              <a class="text-white text-sm font-medium leading-normal" href="#">Contact</a>
+            </div>
+            <button
+              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#1684ce] text-white text-sm font-bold leading-normal tracking-[0.015em]"
+            >
+              <span class="truncate">Order Online</span>
+            </button>
+          </div>
+        </header>
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <div class="@container">
+              <div class="@[480px]:p-4">
+                <div
+                  class="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-center justify-center p-4"
+                  style='background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBnV-FGjOtgVHdeR8m-npWxViNiP1YsjxZA1sxKhCt9Xw2ho3x_zgl1AtUaMoIRLL5cXMfwa8l4iqKeAVTKrkESb1EJNtu6Q9EC5bRCUSDiT8qzZbRMzynAGtGtxI2RFg6XmmHw8c99mg9o0dVKXp-dY_tmORTkq0cJdfV2lLve4BTcq_hoQhItJ6DNnIO5lFW1XM8Rg7LzliUmy1q2C6RDC0YU0xo-GAoO4gx8bxvvqvFkpytYVn5Qw_FV3IuHVGmVWB_q3kzNp-xA");'
+                >
+                  <div class="flex flex-col gap-2 text-center">
+                    <h1
+                      class="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]"
+                    >
+                      The Mountain Cafe
+                    </h1>
+                    <h2
+                      class="text-white text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal"
+                    >
+                      Nestled between the jungle and mountains, our cafe offers a unique dining
+                      experience with stunning views and delicious food.
+                    </h2>
+                  </div>
+                  <button
+                    class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#1684ce] text-white text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
+                  >
+                    <span class="truncate">View Menu</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
+              Our Cafe
+            </h2>
+            <div class="flex w-full grow bg-[#111b22] @container p-4">
+              <div
+                class="w-full gap-1 overflow-hidden bg-[#111b22] @[480px]:gap-2 aspect-[3/2] rounded-xl grid grid-cols-[2fr_1fr_1fr]"
+              >
+                <div
+                  class="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none row-span-2"
+                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuARhVb79InGGgs7mqsT7iOaWo_3Zlit8dPAa4p5MvOY_B46i4RPT1tzQG6TY5Au4QQrM6WRft9zTW7ukq-S1_jDANTaRQhVSgy3AeulgAA9w4Sr1ec4HN1tLtXTMTxKKKNsRD0Vdl-E21diD6TD_VVDIGT59xBLAhhA1RcqyPuQakxv58j-JKHwV2QUbv75o7_WhgLYMTR8L63vNaj5jWWBujSQuilejdtuDTTZJbjqO-r4wct9CHHRh0qnhrLOrWfwTdauNx-2X3L5");'
+                ></div>
+                <div
+                  class="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none col-span-2 row-span-2"
+                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBkcRXuaAsAIX5vkrn89YVG9ej34t4cHrKDRc1FnXyXzi86gX0Uw0tDxIqkDu_NZl-vB7A6DKcVWPpy2XeH8g2syAM5dVmC3PxTw-tSQe-GqKdF4NkoRdOtpTOov6Reezwnl36vtd63VpyqWCyLzDD-cVmFyxTkdigMwHBMh6SVYNld5-bSdPPncLIsk9QlXlX5_vBD5VmyirakzgGOZlACtgHtAWUIMga1f2JxCGq0PeEyfR1XO4tWMhA0rQzFnibZqCm4XO8o2XFb");'
+                ></div>
+              </div>
+            </div>
+            <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
+              Food Options
+            </h2>
+            <div
+              class="flex overflow-y-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
+              <div class="flex items-stretch p-4 gap-3">
+                <div class="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-60">
+                  <div
+                    class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl flex flex-col"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA4K33sa8lBwnKZYMrC3sco_07jIY9UiwXFavPqmBhy7VvkVsy42-7GlM3r0v4-1Yz9yRa5kMh-X8dt961c-BVRopq5Zgg7yb82SlDTqzg9BAkPfWW74dEXLrJRHb_Mh_2fR5K4aPChHfDZ0kqqYdoBQpfwxIMCZrjqdWSDHBhRUhDmIAaViKtsUjHh7CdpUkYa8zFsby8mfHNydjkHOgkW_U3Kn3UV4yBgPFu0y7qoQ6btBr_6gbUybaWqqbHeeILbYVKOMehXOd8s");'
+                  ></div>
+                  <div>
+                    <p class="text-white text-base font-medium leading-normal">Coffee</p>
+                    <p class="text-[#93b3c8] text-sm font-normal leading-normal">
+                      Freshly brewed coffee
+                    </p>
+                  </div>
+                </div>
+                <div class="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-60">
+                  <div
+                    class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl flex flex-col"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBXQN0Bi8zwi-K-6QG1REuzaN8Ae_999P4mBVHvD7AJQaH486yQ7EaAG3P-XVyXU9RQwE-3WTqMhPsQpfVnSJeOHHAHZpGGndJXMnXHQGX_2X5iE7DNJ1RS1u3jYvbn_YUBl7Cx8eQjg5mvOHnIkHJ06DDBObNZ44Ms4uEdixooqhd5QgRaK6H_stIHAdQnkZRmg1hVuODqOHcxqLrSLA_3VFcpp7vS_oiUEGpCPjvV2vy7cPVxOkv7_AO_AFTN8D5O-83_2ImJFzNO");'
+                  ></div>
+                  <div>
+                    <p class="text-white text-base font-medium leading-normal">Sandwiches</p>
+                    <p class="text-[#93b3c8] text-sm font-normal leading-normal">
+                      Delicious sandwiches
+                    </p>
+                  </div>
+                </div>
+                <div class="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-60">
+                  <div
+                    class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl flex flex-col"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBUWb9FB_R1X7vBc4BmdZie6MZsvCLAfZyHmO-AsR-fQLlwptxqxHeXrpdq5rwDmybx1ITGMhEm6j85RQ8L0RiukMdUk1KfrezcTYZsiXqNeVmmK7Z_VvzMQBOeeMmRzPNAsEvA8sXdxlnTblxxuRfD6YppI0KCJ_uu5q3n1uVZG-_aGvbW1aChcfP4VIfHXNOWbGH85LUUG0iYivFFHGR6p8eyJjEtxdz_2sRPZup2uPmTWmBMMvHjNUnN1DcNsIWaLS78YiT49azB");'
+                  ></div>
+                  <div>
+                    <p class="text-white text-base font-medium leading-normal">Salads</p>
+                    <p class="text-[#93b3c8] text-sm font-normal leading-normal">
+                      Healthy salads
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="flex justify-center">
+          <div class="flex max-w-[960px] flex-1 flex-col">
+            <footer class="flex flex-col gap-6 px-5 py-10 text-center @container">
+              <div
+                class="flex flex-wrap items-center justify-center gap-6 @[480px]:flex-row @[480px]:justify-around"
+              >
+                <a class="text-[#93b3c8] text-base font-normal leading-normal min-w-40" href="#"
+                  >Privacy Policy</a
+                >
+                <a class="text-[#93b3c8] text-base font-normal leading-normal min-w-40" href="#"
+                  >Terms of Service</a
+                >
+              </div>
+              <p class="text-[#93b3c8] text-base font-normal leading-normal">
+                @2024 The Mountain Cafe. All rights reserved.
+              </p>
+            </footer>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
