@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x # <--- Add this line
 # --- Configuration Variables ---
 # Replace with your Docker Hub username
 DOCKER_USERNAME="abhayrdhyani" 
