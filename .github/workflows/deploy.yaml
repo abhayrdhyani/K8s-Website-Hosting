@@ -15,6 +15,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Build and Push Backend Image
+        run: |
+          pwd
+          echo "DOCKER_PAT length: ${#DOCKER_PAT}" # <--- THIS LINE IS CRUCIAL
+          # ... (rest of your backend.sh execution or call to backend.sh)
+        env:
+          DOCKER_PAT: ${{ secrets.DOCKER_HUB_PERSONAL_ACCESS_TOKEN }}
+
       # Step 2: Set DOCKER_PAT environment variable and execute your backend build/push script
       # Assuming 'backend.sh' is located in the root of your repository
       - name: Build and Push Backend Image
