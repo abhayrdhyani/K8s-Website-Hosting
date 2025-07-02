@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # --- Configuration Variables ---
-# Replace with your Docker Hub username
+# Replace with your Docker Hub usernamee
 DOCKER_USERNAME="abhayrdhyani" 
 # Name for your Docker image (e.g., my-node-backend-api)
 IMAGE_NAME="my-node-backend-image" 
