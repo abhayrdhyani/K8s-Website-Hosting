@@ -29,7 +29,6 @@ echo "Currently in: $(pwd)"
 
 # --- Docker Login ---
 echo "Attempting to log in to Docker Hub as $DOCKER_USERNAME..."
-# We pipe the PAT to --password-stdin for secure non-interactive login
 echo "$DOCKER_PAT" | docker login --username "$DOCKER_USERNAME" --password-stdin
 
 if [ $? -ne 0 ]; then
@@ -37,6 +36,16 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 echo "Docker login successful."
+
+# --- ADD THESE DEBUG LINES HERE ---
+echo "--- DEBUGGING IMAGE NAME ---"
+echo "DOCKER_USERNAME_VAL: '$DOCKER_USERNAME'"
+echo "IMAGE_NAME_VAL:      '$IMAGE_NAME'"
+echo "IMAGE_TAG_VAL:       '$IMAGE_TAG'"
+echo "FULL_IMAGE_NAME_VAL: '$FULL_IMAGE_NAME'" # <-- This line is very important!
+echo "--- END DEBUG ---"
+# --- END DEBUG LINES ---
+
 
 # --- Build the Docker Image ---
 echo "Building Docker image: $FULL_IMAGE_NAME"
