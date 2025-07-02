@@ -1,15 +1,14 @@
 #!/bin/bash
 
 # --- Configuration Variables ---
-# Replace with your Docker Hub usernamee
+# Replace with your Docker Hub username
 DOCKER_USERNAME="abhayrdhyani" 
 # Name for your Docker image (e.g., my-node-backend-api)
-#IMAGE_NAME="my-node-backend-image" 
-IMAGE_NAME="my-node-backend-image"
+IMAGE_NAME="my-node-backend-image" 
 # Tag for your Docker image (e.g., latest, v1.0, dev)
 IMAGE_TAG="v1" 
 
-# Full image name with tag for Docker Hubbb
+# Full image name with tag for Docker Hub
 FULL_IMAGE_NAME="$DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG"
 
 # --- Validate Docker Hub Personal Access Token (PAT) ---
@@ -29,6 +28,7 @@ echo "Currently in: $(pwd)"
 
 # --- Docker Login ---
 echo "Attempting to log in to Docker Hub as $DOCKER_USERNAME..."
+# We pipe the PAT to --password-stdin for secure non-interactive login
 echo "$DOCKER_PAT" | docker login --username "$DOCKER_USERNAME" --password-stdin
 
 if [ $? -ne 0 ]; then
@@ -37,21 +37,10 @@ if [ $? -ne 0 ]; then
 fi
 echo "Docker login successful."
 
-# --- ADD THESE DEBUG LINES HERE ---
-echo "--- DEBUGGING IMAGE NAME ---"
-echo "DOCKER_USERNAME_VAL: '$DOCKER_USERNAME'"
-echo "IMAGE_NAME_VAL:      '$IMAGE_NAME'"
-echo "IMAGE_TAG_VAL:       '$IMAGE_TAG'"
-echo "FULL_IMAGE_NAME_VAL: '$FULL_IMAGE_NAME'" # <-- This line is very important!
-echo "--- END DEBUG ---"
-# --- END DEBUG LINES ---
-
-
 # --- Build the Docker Image ---
 echo "Building Docker image: $FULL_IMAGE_NAME"
 # The '.' indicates that the Dockerfile is in the current directory (which is now 'backend/')
-#docker build -t "$FULL_IMAGE_NAME" .
-DOCKER_BUILDKIT=0 docker build -t "$FULL_IMAGE_NAME" .
+docker build -t "$FULL_IMAGE_NAME" .
 
 if [ $? -ne 0 ]; then
   echo "Error: Docker image build failed. Check your Dockerfile and context."
@@ -64,7 +53,6 @@ echo "Docker image built successfully."
 # --- Push the Docker Image to Docker Hub ---
 echo "Pushing Docker image: $FULL_IMAGE_NAME to Docker Hub..."
 docker push "$FULL_IMAGE_NAME"
-
 
 if [ $? -ne 0 ]; then
   echo "Error: Docker image push failed. Check your network or Docker Hub permissions."
