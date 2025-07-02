@@ -1,8 +1,8 @@
-name: CI/CD for backend pod # Corrected namee
+name: CI/CD for Backend Pod
 on:
   push:
     branches:
-      - main # This workflow will run whenever there's a push to the 'main' branchh
+      - main # This workflow will run whenever there's a push to the 'main' branch
 
 jobs:
   deploy:
@@ -10,26 +10,29 @@ jobs:
 
     steps:
       # Step 1: Checkout the repository code
-      # This action fetches your repository's contents onto the runner.
-      # WITHOUT THIS, 'backend.sh' WILL NOT BE FOUND!
+      # This action fetches your repository's contents onto the runner's working directory.
+      # The working directory for subsequent steps will be the repository root (e.g., K8s-Website-Hosting/)
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Step 2: Build and Push Backend Image
+      # This step will navigate to the directory where backend.sh is located
+      # and then execute it.
       - name: Build and Push Backend Image
         run: |
-          pwd
-          echo "DOCKER_PAT length: ${#DOCKER_PAT}" # <--- THIS LINE IS CRUCIAL
-          # ... (rest of your backend.sh execution or call to backend.sh)
-        env:
-          DOCKER_PAT: ${{ secrets.DOCKER_HUB_PERSONAL_ACCESS_TOKEN }}
-
-      # Step 2: Set DOCKER_PAT environment variable and execute your backend build/push script
-      # Assuming 'backend.sh' is located in the root of your repository
-      - name: Build and Push Backend Image
-        run: |
-          pwd # This will show you the current working directory (should be the repo root)
-          cd /opt/K8s-Website-Hosting/beImagebuild
-          pwd
+          # Print current working directory (should be repo root after checkout)
+          echo "Current working directory (repo root): $(pwd)"
+          
+          # Debug: Confirm DOCKER_PAT variable length
+          echo "DOCKER_PAT length: ${#DOCKER_PAT}" 
+          
+          # Navigate to the directory containing backend.sh
+          # Your backend.sh is in K8s-Website-Hosting/beImagebuild/
+          echo "Changing directory to beImagebuild..."
+          cd beImagebuild || { echo "Error: 'beImagebuild' directory not found at repo root. Exiting."; exit 1; }
+          echo "Currently in: $(pwd)" # Should now be K8s-Website-Hosting/beImagebuild/
+          
+          # Now execute backend.sh from this directory
           ./backend.sh
         env:
           # This environment variable will be picked up by your backend.sh script for docker login
@@ -38,5 +41,6 @@ jobs:
           # Go to your repository -> Settings -> Secrets and variables -> Actions -> New repository secret
           DOCKER_PAT: ${{ secrets.DOCKER_HUB_PERSONAL_ACCESS_TOKEN }}
 
-      # You might add more steps here, e.g., kubectl apply to update your deployment
-      # if your Kubernetes setup is also part of this workflow.
+      # You might add more steps here, e.g., kubectl apply to update your Kubernetes deployment.
+      # This would typically involve another 'run' step that executes kubectl commands
+      # or uses a Kubernetes action.
