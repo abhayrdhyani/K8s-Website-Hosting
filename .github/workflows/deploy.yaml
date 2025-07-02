@@ -1,4 +1,4 @@
-name: CI/CD for backend pod # Corrected name
+name: CI/CD for backend pod # Corrected namee
 on:
   push:
     branches:
