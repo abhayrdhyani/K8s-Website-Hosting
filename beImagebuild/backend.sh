@@ -4,7 +4,8 @@
 # Replace with your Docker Hub usernamee
 DOCKER_USERNAME="abhayrdhyani" 
 # Name for your Docker image (e.g., my-node-backend-api)
-IMAGE_NAME="my-node-backend-image" 
+#IMAGE_NAME="my-node-backend-image" 
+IMAGE_NAME="my-node-backend-image"
 # Tag for your Docker image (e.g., latest, v1.0, dev)
 IMAGE_TAG="v1" 
 
